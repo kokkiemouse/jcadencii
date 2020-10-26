@@ -61,6 +61,7 @@ public class Cadencii implements Thread.UncaughtExceptionHandler {
     }
 
     public static void main(String[] args) {
+        System.setProperty("awt.useSystemAAFontSettings", "on");
         Thread.setDefaultUncaughtExceptionHandler(new Cadencii());
 
         // 引数を解釈
