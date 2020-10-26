@@ -21,7 +21,7 @@ import org.kbinani.cadencii.*;
 
 public class Cadencii implements Thread.UncaughtExceptionHandler {
     private static String mPathVsq = "";
-    private static String mPathResource = "";
+    private static String mPathLanguage = "";
     private static boolean mPrintVersion = false;
 
     /// <summary>
@@ -45,8 +45,8 @@ public class Cadencii implements Thread.UncaughtExceptionHandler {
             } else {
                 if (str.compare(currentparse, "")) {
                     mPathVsq = argi;
-                } else if (str.compare(currentparse, "-resources")) {
-                    mPathResource = argi;
+                } else if (str.compare(currentparse, "-languages")) {
+                    mPathLanguage = argi;
                 }
 
                 currentparse = "";
@@ -71,15 +71,13 @@ public class Cadencii implements Thread.UncaughtExceptionHandler {
 
             return;
         }
-
+        if(mPathLanguage == null){
+            mPathLanguage=System.getProperty("user.dir");
+        }
         String file = mPathVsq;
 
-        if (!str.compare(mPathResource, "")) {
-            Resources.setBasePath(mPathResource);
-        }
-
         try {
-            Messaging.loadMessages();
+            Messaging.loadMessages(mPathLanguage);
         } catch (Exception ex) {
             Logger.write(Cadencii.class + ".main; ex=" + ex + "\n");
             serr.println("Cadencii.main; ex=" + ex);
