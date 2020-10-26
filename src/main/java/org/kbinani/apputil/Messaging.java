@@ -94,10 +94,22 @@ public class Messaging {
             appendFromFile(fname);
         }
     }
+    public static void loadMessages_jar() {
+        s_messages.clear();
+        String path_head="lang/";
+        appendFromAsset(path_head + "ja.po");
+        appendFromAsset(path_head + "kr.po");
+        appendFromAsset(path_head + "zh-CN.po");
+        appendFromAsset(path_head + "zh-TW.po");
+    }
 
     public static void appendFromFile(String file) {
         s_messages.add(new MessageBody(PortUtil.getFileNameWithoutExtension(
                     file), file));
+    }
+    public static void appendFromAsset(String asset_name) {
+        s_messages.add(new MessageBody(PortUtil.getFileNameWithoutExtension(
+                asset_name), Messaging.class.getClassLoader().getResourceAsStream(asset_name)));
     }
 
     public static MessageBodyEntry getMessageDetail(String id) {

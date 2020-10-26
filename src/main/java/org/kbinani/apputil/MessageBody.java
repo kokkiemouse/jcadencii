@@ -17,13 +17,7 @@ import org.kbinani.ByRef;
 import org.kbinani.PortUtil;
 import org.kbinani.str;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
+import java.io.*;
 
 import java.util.Iterator;
 import java.util.TreeMap;
@@ -123,6 +117,79 @@ public class MessageBody {
         }
     }
 
+    public MessageBody(String lang_, InputStream istream) {
+        lang = lang_;
+        poHeader = "";
+
+        BufferedReader sr = null;
+
+        try {
+            sr = new BufferedReader(new InputStreamReader(
+                    istream, "UTF-8"));
+
+            String line2 = "";
+
+            while ((line2 = sr.readLine()) != null) {
+                ByRef<String> msgid = new ByRef<String>("");
+                String first_line = line2;
+                ByRef<String[]> location = new ByRef<String[]>();
+                String last_line = readTillMessageEnd(sr, first_line, "msgid",
+                        msgid, location);
+                ByRef<String> msgstr = new ByRef<String>("");
+                ByRef<String[]> location_dumy = new ByRef<String[]>();
+                last_line = readTillMessageEnd(sr, last_line, "msgstr", msgstr,
+                        location_dumy);
+
+                if (PortUtil.getStringLength(msgid.value) > 0) {
+                    list.put(msgid.value,
+                            new MessageBodyEntry(msgstr.value, location.value));
+                } else {
+                    poHeader = msgstr.value;
+
+                    String[] spl = PortUtil.splitString(poHeader,
+                            new char[] { (char) 0x0d, (char) 0x0a }, true);
+                    poHeader = "";
+
+                    int count = 0;
+
+                    for (int i = 0; i < spl.length; i++) {
+                        String line = spl[i];
+                        String[] spl2 = PortUtil.splitString(line,
+                                new char[] { ':' }, 2);
+
+                        if (spl2.length == 2) {
+                            String name = spl2[0].trim();
+                            String ct = "Content-Type";
+                            String cte = "Content-Transfer-Encoding";
+
+                            if (name.toLowerCase().equals(ct.toLowerCase())) {
+                                poHeader += (((count == 0) ? "" : "\n") +
+                                        "Content-Type: text/plain; charset=UTF-8");
+                            } else if (name.toLowerCase()
+                                    .equals(cte.toLowerCase())) {
+                                poHeader += (((count == 0) ? "" : "\n") +
+                                        "Content-Transfer-Encoding: 8bit");
+                            } else {
+                                poHeader += (((count == 0) ? "" : "\n") + line);
+                            }
+                        } else {
+                            poHeader += (((count == 0) ? "" : "\n") + line);
+                        }
+
+                        count++;
+                    }
+                }
+            }
+        } catch (Exception ex) {
+        } finally {
+            if (sr != null) {
+                try {
+                    sr.close();
+                } catch (Exception ex2) {
+                }
+            }
+        }
+    }
     public String getMessage(String id) {
         if (list.containsKey(id)) {
             String ret = list.get(id).message;

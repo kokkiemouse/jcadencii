@@ -78,7 +78,7 @@ public class Cadencii implements Thread.UncaughtExceptionHandler {
         String file = mPathVsq;
 
         try {
-            Messaging.loadMessages(mPathLanguage);
+            Messaging.loadMessages_jar();
         } catch (Exception ex) {
             Logger.write(Cadencii.class + ".main; ex=" + ex + "\n");
             serr.println("Cadencii.main; ex=" + ex);
