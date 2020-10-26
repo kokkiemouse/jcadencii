@@ -65,7 +65,7 @@ import org.kbinani.apputil.*;
         {
 if( path.indexOf( "~" ) >= 0 ){
     String usr = System.getProperty( "user.name" );
-    String tild = "/Users/" + usr;
+    String tild = "/home/" + usr;
     path = path.replace( "~", tild );
 }
 path = path.replace( "\\", "\\\\\\\\" );

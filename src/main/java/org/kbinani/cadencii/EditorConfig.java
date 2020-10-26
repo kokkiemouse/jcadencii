@@ -637,7 +637,7 @@ public class EditorConfig {
     /// 使用するWINEPREFIX
     /// version 3.3+
     /// </summary>
-    public String WinePrefix = "~/Library/Application Support/MikuInstaller/prefix/default";
+    public String WinePrefix = "~/.wine";
 
     /// <summary>
     /// wineのトップディレクトリ
