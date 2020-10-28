@@ -17,6 +17,12 @@ package org.kbinani.cadencii;
 /// <summary>
 /// 歌声合成システムの種類
 /// </summary>
+
+/**
+ * 歌声合成システムの種類
+ * @author kokkiemouse
+ *
+ */
 public enum RendererKind {VOCALOID1,
 
     /// <summary>
@@ -43,6 +49,10 @@ public enum RendererKind {VOCALOID1,
     /// vConnect-STAND
     /// </summary>
     VCNT,
+    /**
+     * NEUTRINO
+     */
+    NEUTRINO,
     /// <summary>
     /// 何もしない歌声合成システム(EmptyRenderingRunner)
     /// </summary>

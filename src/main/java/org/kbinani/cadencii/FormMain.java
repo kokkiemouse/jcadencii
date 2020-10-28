@@ -75,7 +75,7 @@ import javax.swing.JSeparator;
 import javax.swing.border.EmptyBorder;
 
 
-/// <summary>
+/// <summary>V
 /// エディタのメイン画面クラス
 /// </summary>
 public class FormMain extends BForm implements FormMainUi {
@@ -639,6 +639,7 @@ public class FormMain extends BForm implements FormMainUi {
     private BMenuItem menuTrackRendererVOCALOID2 = null;
     private BMenu menuTrackRendererUtau = null;
     private BMenuItem menuTrackRendererVCNT = null;
+    private BMenuItem menuTrackRendererNEUTRINO = null;
     private BMenuItem menuSettingGameControlerSetting = null;
     private BMenuItem menuSettingGameControlerLoad = null;
     private BMenuItem menuSettingGameControlerRemove = null;
@@ -3713,6 +3714,8 @@ public class FormMain extends BForm implements FormMainUi {
                 new BMenuItem[] { menuTrackRendererAquesTone }));
         work.add(new ValuePair<String, BMenuItem[]>("menuTrackRendererVCNT",
                 new BMenuItem[] { menuTrackRendererVCNT }));
+        work.add(new ValuePair<String, BMenuItem[]>("menuTrackRendererNEUTRINO",
+                new BMenuItem[] { menuTrackRendererNEUTRINO }));
 
         int c = work.size();
 
@@ -4221,6 +4224,8 @@ public class FormMain extends BForm implements FormMainUi {
         menuTrackRendererUtau.setMnemonic(KeyEvent.VK_4);
         menuTrackRendererVCNT.setMnemonic(KeyEvent.VK_5);
         menuTrackRendererAquesTone.setMnemonic(KeyEvent.VK_6);
+        menuTrackRendererNEUTRINO.setMnemonic(KeyEvent.VK_7);
+
 
         menuLyric.setText(gettext("Lyrics"));
         menuLyric.setMnemonic(KeyEvent.VK_L);
@@ -7057,6 +7062,10 @@ public class FormMain extends BForm implements FormMainUi {
         menuTrackRendererVCNT.mouseEnterEvent.add(new BEventHandler(this,
                 "handleMenuMouseEnter"));
         menuTrackRendererVCNT.clickEvent.add(new BEventHandler(this,
+                "handleChangeRenderer"));
+        menuTrackRendererNEUTRINO.mouseEnterEvent.add(new BEventHandler(this,
+                "handleMenuMouseEnter"));
+        menuTrackRendererNEUTRINO.clickEvent.add(new BEventHandler(this,
                 "handleChangeRenderer"));
         menuTrackRendererAquesTone.mouseEnterEvent.add(new BEventHandler(this,
                 "handleMenuMouseEnter"));
@@ -15756,6 +15765,8 @@ heaven:
         menuTrackRendererUtau.setSelected(false);
         cMenuTrackTabRendererStraight.setSelected(false);
         menuTrackRendererVCNT.setSelected(false);
+        menuTrackRendererNEUTRINO.setSelected(false);
+
         cMenuTrackTabRendererAquesTone.setSelected(false);
         menuTrackRendererAquesTone.setSelected(false);
 
@@ -15773,6 +15784,9 @@ heaven:
         } else if (kind == RendererKind.VCNT) {
             cMenuTrackTabRendererStraight.setSelected(true);
             menuTrackRendererVCNT.setSelected(true);
+        } else if (kind == RendererKind.NEUTRINO) {
+            cMenuTrackTabRendererStraight.setSelected(true);
+            menuTrackRendererNEUTRINO.setSelected(true);
         } else if (kind == RendererKind.AQUES_TONE) {
             cMenuTrackTabRendererAquesTone.setSelected(true);
             menuTrackRendererAquesTone.setSelected(true);
@@ -16706,6 +16720,8 @@ heaven:
             text = gettext("UTAU");
         } else if (sender == menuTrackRendererVCNT) {
             text = gettext("vConnect-STAND");
+        } else if (sender == menuTrackRendererNEUTRINO) {
+            text = gettext("NEUTRINO");
         } else if (sender == menuTrackRendererVOCALOID1) {
             text = gettext("VOCALOID1");
         } else if (sender == menuTrackRendererVOCALOID2) {
@@ -16741,6 +16757,9 @@ heaven:
         } else if ((sender == cMenuTrackTabRendererStraight) ||
                 (sender == menuTrackRendererVCNT)) {
             kind = RendererKind.VCNT;
+        } else if ((sender == cMenuTrackTabRendererStraight) ||
+                (sender == menuTrackRendererNEUTRINO)) {
+            kind = RendererKind.NEUTRINO;
         } else if ((sender == cMenuTrackTabRendererVOCALOID1) ||
                 (sender == menuTrackRendererVOCALOID1)) {
             kind = RendererKind.VOCALOID1;
@@ -16842,10 +16861,12 @@ heaven:
             cMenuTrackTabRendererVOCALOID2.setSelected(kind == RendererKind.VOCALOID2);
             cMenuTrackTabRendererUtau.setSelected(kind == RendererKind.UTAU);
             cMenuTrackTabRendererStraight.setSelected(kind == RendererKind.VCNT);
+            cMenuTrackTabRendererStraight.setSelected(kind == RendererKind.NEUTRINO);
             menuTrackRendererVOCALOID1.setSelected(kind == RendererKind.VOCALOID1);
             menuTrackRendererVOCALOID2.setSelected(kind == RendererKind.VOCALOID2);
             menuTrackRendererUtau.setSelected(kind == RendererKind.UTAU);
             menuTrackRendererVCNT.setSelected(kind == RendererKind.VCNT);
+            menuTrackRendererNEUTRINO.setSelected(kind == RendererKind.NEUTRINO);
 
             for (int i = 0; i < cMenuTrackTabRendererUtau.getComponentCount();
                     i++) {
@@ -18647,6 +18668,7 @@ heaven:
             menuTrackRenderer.add(getMenuTrackRendererVOCALOID2());
             menuTrackRenderer.add(getMenuTrackRendererUtau());
             menuTrackRenderer.add(getMenuTrackRendererVCNT());
+            menuTrackRenderer.add(getMenuTrackRendererNEUTRINO());
             menuTrackRenderer.add(getMenuTrackRendererAquesTone());
         }
 
@@ -21134,6 +21156,18 @@ heaven:
         }
 
         return menuTrackRendererVCNT;
+    }    /**
+     * This method initializes menuTrackRendererNEUTRINO
+     *
+     * @return javax.swing.JMenuItem
+     */
+    private BMenuItem getMenuTrackRendererNEUTRINO() {
+        if (menuTrackRendererNEUTRINO == null) {
+            menuTrackRendererNEUTRINO = new BMenuItem();
+            menuTrackRendererNEUTRINO.setText("NEUTRINO");
+        }
+
+        return menuTrackRendererNEUTRINO;
     }
 
     /**
