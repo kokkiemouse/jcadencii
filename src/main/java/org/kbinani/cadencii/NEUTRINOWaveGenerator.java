@@ -281,14 +281,19 @@ public class NEUTRINOWaveGenerator extends WaveUnit implements WaveGenerator {
             NEUTRINORenderingQueue queue = mQueue.get(i);
             String tmp_dir = AppManager.getTempWaveDir();
 
-            String tmp_file = fsys.combine(tmp_dir, "tmp.usq");
+            String tmp_file = fsys.combine(tmp_dir, "tmp.musicxml");
             String hash = "";
             BufferedWriter sw = null;
 
+            /*
             try {
                 sw = new BufferedWriter(new OutputStreamWriter(
-                            new FileOutputStream(tmp_file), "Shift_JIS"));
-                prepareMetaText(sw, queue.track, queue.oto_ini, queue.endClock);
+                            new FileOutputStream(tmp_file)));
+
+             */
+                //prepareMetaText(sw, queue.track, queue.oto_ini, queue.endClock);
+                mVsq.printAsMusicXml(tmp_file,"UTF-8");
+            /*
             } catch (Exception ex) {
             } finally {
                 if (sw != null) {
@@ -298,7 +303,7 @@ public class NEUTRINOWaveGenerator extends WaveUnit implements WaveGenerator {
                     }
                 }
             }
-
+            */
             try {
                 hash = PortUtil.getMD5(tmp_file).replace("_", "");
             } catch (Exception ex) {
