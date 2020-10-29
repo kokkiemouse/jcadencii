@@ -10237,6 +10237,7 @@ heaven:
         AppManager.saveConfig();
         UtauWaveGenerator.clearCache();
         VConnectWaveGenerator.clearCache();
+        NEUTRINOWaveGenerator.clearCache();
 
         if (mMidiIn != null) {
             mMidiIn.close();

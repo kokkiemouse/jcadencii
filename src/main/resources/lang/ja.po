@@ -2479,4 +2479,5 @@ msgstr "保存しますか?"
 #~ msgstr "monoのファイルダイアログを使用しない"
 #~ msgid "Master Tuning"
 #~ msgstr "マスターチューニング"
-
+msgid   "NEUTRINO"
+msgstr  "NEUTRINO"

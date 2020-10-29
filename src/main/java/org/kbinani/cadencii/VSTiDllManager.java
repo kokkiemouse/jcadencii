@@ -119,6 +119,8 @@ public class VSTiDllManager {
         if (kind == RendererKind.AQUES_TONE) {
         } else if (kind == RendererKind.VCNT) {
             return new VConnectWaveGenerator();
+        }else if (kind == RendererKind.NEUTRINO){
+            return new NEUTRINOWaveGenerator();
         } else if (kind == RendererKind.UTAU) {
             return new UtauWaveGenerator();
         } else if ((kind == RendererKind.VOCALOID1) ||

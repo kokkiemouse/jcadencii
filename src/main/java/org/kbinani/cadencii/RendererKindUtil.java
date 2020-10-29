@@ -25,6 +25,7 @@ public class RendererKindUtil {
     static final String VOCALOID1 = "VOCALOID1";
     static final String VOCALOID2 = "VOCALOID2";
     static final String VCNT = "vConnect-STAND";
+    static final String NEUTRINO = "NEUTRINO";
     static final String UTAU = "UTAU";
     static final String AQUES_TONE = "AquesTone";
 
@@ -39,6 +40,8 @@ public class RendererKindUtil {
             return VOCALOID2;
         } else if (value == RendererKind.VCNT) {
             return VCNT;
+        } else if (value == RendererKind.NEUTRINO) {
+            return NEUTRINO;
         } else if (value == RendererKind.UTAU) {
             return UTAU;
         } else if (value == RendererKind.AQUES_TONE) {
