@@ -56,7 +56,7 @@ public class NEUTRINOWaveGenerator extends WaveUnit implements WaveGenerator {
     protected int mTrack = 0;
     protected int mTrimMillisec;
     protected int mSampleRate;
-    private Vector<VConnectRenderingQueue> mQueue;
+    private Vector<NEUTRINORenderingQueue> mQueue;
     private Vector<SingerConfig> mSingerConfigSys;
     private double mProgressPercent = 0.0;
     private TreeMap<String, UtauVoiceDB> mVoiceDBConfigs = new TreeMap<String, UtauVoiceDB>();
@@ -159,7 +159,7 @@ public class NEUTRINOWaveGenerator extends WaveUnit implements WaveGenerator {
 
         // StraightRenderingRunner.ctorの実装より
         mLocker = new Object();
-        mQueue = new Vector<VConnectRenderingQueue>();
+        mQueue = new Vector<NEUTRINORenderingQueue>();
 
         if ((mConfig != null) && (mConfig.UtauSingers != null)) {
             mSingerConfigSys = mConfig.UtauSingers;
@@ -205,7 +205,7 @@ public class NEUTRINOWaveGenerator extends WaveUnit implements WaveGenerator {
         }
 
         if (mQueue.size() > 0) {
-            VConnectRenderingQueue q = mQueue.get(mQueue.size() - 1);
+            NEUTRINORenderingQueue q = mQueue.get(mQueue.size() - 1);
             mVsqLengthSamples = q.startSample + q.abstractSamples;
         }
     }
@@ -242,7 +242,7 @@ public class NEUTRINOWaveGenerator extends WaveUnit implements WaveGenerator {
 
         if (mQueue.size() > 0) {
             // 最初のキューが始まるまでの無音部分
-            VConnectRenderingQueue queue = mQueue.get(0);
+            NEUTRINORenderingQueue queue = mQueue.get(0);
 
             if (queue.startSample > 0) {
                 for (int i = 0; i < BUFLEN; i++) {
@@ -278,7 +278,7 @@ public class NEUTRINOWaveGenerator extends WaveUnit implements WaveGenerator {
                 return;
             }
 
-            VConnectRenderingQueue queue = mQueue.get(i);
+            NEUTRINORenderingQueue queue = mQueue.get(i);
             String tmp_dir = AppManager.getTempWaveDir();
 
             String tmp_file = fsys.combine(tmp_dir, "tmp.usq");
@@ -330,7 +330,7 @@ public class NEUTRINOWaveGenerator extends WaveUnit implements WaveGenerator {
                     while ((stream.read() >= 0) && !state.isCancelRequested())
                         ;
                 } catch (Exception ex) {
-                    System.err.println("VConnectWaveGenerator#begin; ex=" + ex);
+                    System.err.println("NEUTRINOWaveGenerator#begin; ex=" + ex);
                 }
 
                 try {
@@ -375,7 +375,7 @@ public class NEUTRINOWaveGenerator extends WaveUnit implements WaveGenerator {
             long next_wave_start = max_next_wave_start;
 
             if ((i + 1) < count) {
-                VConnectRenderingQueue next_queue = mQueue.get(i + 1);
+                NEUTRINORenderingQueue next_queue = mQueue.get(i + 1);
                 next_wave_start = next_queue.startSample;
             }
 
@@ -540,7 +540,7 @@ public class NEUTRINOWaveGenerator extends WaveUnit implements WaveGenerator {
                                 cached_data_length -= append_len;
                             } catch (Exception ex) {
                                 AppManager.debugWriteLine(
-                                    "VConnectWaveGenerator#begin; (A),(B); ex=" +
+                                    "NEUTRINOWaveGenerator#begin; (A),(B); ex=" +
                                     ex);
                             }
                         } else {
@@ -598,7 +598,7 @@ public class NEUTRINOWaveGenerator extends WaveUnit implements WaveGenerator {
                                 cached_data_length = 0;
                             } catch (Exception ex) {
                                 AppManager.debugWriteLine(
-                                    "VConnectWaveGenerator#begin; (C); ex=" +
+                                    "NEUTRINOWaveGenerator#begin; (C); ex=" +
                                     ex);
                             }
                         }
@@ -683,7 +683,7 @@ public class NEUTRINOWaveGenerator extends WaveUnit implements WaveGenerator {
                                 }
                             } catch (Exception ex) {
                                 AppManager.debugWriteLine(
-                                    "VConnectWaveGenerator#begin; (D); ex=" +
+                                    "NEUTRINOWaveGenerator#begin; (D); ex=" +
                                     ex);
                             }
                         } else if (next_wave_start < (queue.startSample +
@@ -750,7 +750,7 @@ public class NEUTRINOWaveGenerator extends WaveUnit implements WaveGenerator {
                                     cached_data_r);
                             } catch (Exception ex) {
                                 AppManager.debugWriteLine(
-                                    "VConnectWaveGenerator#begin; (E); ex=" +
+                                    "NEUTRINOWaveGenerator#begin; (E); ex=" +
                                     ex);
                             }
                         } else {
@@ -816,20 +816,20 @@ public class NEUTRINOWaveGenerator extends WaveUnit implements WaveGenerator {
                                 cached_data_length = 0;
                             } catch (Exception ex) {
                                 AppManager.debugWriteLine(
-                                    "VConnectWaveGenerator#begin; (F); ex=" +
+                                    "NEUTRINOWaveGenerator#begin; (F); ex=" +
                                     ex);
                             }
                         }
                     }
                 }
             } catch (Exception ex) {
-                serr.println("VConnectWaveGenerator#begin; ex=" + ex);
+                serr.println("NEUTRINOWaveGenerator#begin; ex=" + ex);
             } finally {
                 if (wr != null) {
                     try {
                         wr.close();
                     } catch (Exception ex2) {
-                        serr.println("VConnectWaveGenerator#begin; ex2=" + ex2);
+                        serr.println("NEUTRINOWaveGenerator#begin; ex2=" + ex2);
                     }
 
                     wr = null;
@@ -1101,7 +1101,7 @@ public class NEUTRINOWaveGenerator extends WaveUnit implements WaveGenerator {
 
         double abstract_sec = tlast_clock / (8.0 * TEMPO);
 
-        VConnectRenderingQueue queue = new VConnectRenderingQueue();
+        NEUTRINORenderingQueue queue = new NEUTRINORenderingQueue();
         // レンダリング結果の何秒後に音符が始まるか？
         queue.startSample = (int) ((start_sec - (OFFSET / (8.0 * TEMPO))) * mSampleRate);
         queue.oto_ini = oto_ini;
@@ -1234,7 +1234,7 @@ public class NEUTRINOWaveGenerator extends WaveUnit implements WaveGenerator {
                 src.print(writer, 0, name);
             }
         } catch (Exception ex) {
-            Logger.write(VConnectWaveGenerator.class + ".prepareMetaText; ex=" +
+            Logger.write(NEUTRINOWaveGenerator.class + ".prepareMetaText; ex=" +
                 ex + "\n");
         }
     }
