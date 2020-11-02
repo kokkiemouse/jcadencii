@@ -1294,6 +1294,8 @@ return "";
 Vector<VsqID> singers = null;
 if ( kind == RendererKind.AQUES_TONE ) {
     singers = new Vector<VsqID>();
+} else if ( kind == RendererKind.NEUTRINO ) {
+            singers = new Vector<VsqID>();
 } else if ( kind == RendererKind.VCNT || kind == RendererKind.UTAU ) {
     Vector<SingerConfig> list = editorConfig.UtauSingers;
     singers = new Vector<VsqID>();

@@ -33,8 +33,10 @@ public class NEUTRINOWaveGenerator extends WaveUnit implements WaveGenerator {
     /// <summary>
     /// シンセサイザの実行ファイル名
     /// </summary>
-    public static final String STRAIGHT_SYNTH = fsys.combine(fsys.combine(
+    /*public static final String STRAIGHT_SYNTH = fsys.combine(fsys.combine(
                 "usr", "bin"), "vconnect_stand");
+
+     */
     private static final int BUFLEN = 1024;
     private static final int VERSION = 0;
     private static final int TEMPO = 120;
@@ -219,14 +221,14 @@ public class NEUTRINOWaveGenerator extends WaveUnit implements WaveGenerator {
         //mAbortRequired = false;
         double[] bufL = new double[BUFLEN];
         double[] bufR = new double[BUFLEN];
-        String straight_synth = STRAIGHT_SYNTH;
+        //String straight_synth = STRAIGHT_SYNTH;
 
-        if (!fsys.isFileExists(straight_synth)) {
+        /*if (!fsys.isFileExists(straight_synth)) {
             exitBegin();
 
             return;
         }
-
+*/
         int count = mQueue.size();
 
         // 合計でレンダリングしなければならないサンプル数を計算しておく
@@ -308,7 +310,7 @@ public class NEUTRINOWaveGenerator extends WaveUnit implements WaveGenerator {
                 hash = PortUtil.getMD5(tmp_file).replace("_", "");
             } catch (Exception ex) {
             }
-
+            System.out.println("tmpfile:" + tmp_file);
             try {
                 PortUtil.copyFile(tmp_file, fsys.combine(tmp_dir, hash +
                         ".usq"));
@@ -321,7 +323,7 @@ public class NEUTRINOWaveGenerator extends WaveUnit implements WaveGenerator {
             if (!mCache.containsKey(hash) ||
                     !fsys.isFileExists(tmp_file + ".wav")) {
                 String[] args = new String[] {
-                        straight_synth.replace("\\", "\\" + "\\"),
+                        /*straight_synth.replace("\\", "\\" + "\\"),*/
                         tmp_file.replace("\\", "\\" + "\\") + ".usq",
                         tmp_file.replace("\\", "\\" + "\\") + ".wav"
                     };
