@@ -1387,6 +1387,12 @@ public class Preference extends BDialog {
             }
         }
     }
+
+    /**
+     * NEUTRINO Save button clicked
+     * @param sender sender
+     * @param e eventargs
+     */
     public void neutrino_ok_click(Object sender,BEventArgs e){
         AppManager.editorConfig.NEUTRINO_PATH=tabNeutrino.neutrino_dir_select_container.NEUTRINO_DIR_Select.select_path_text.getText();
     }

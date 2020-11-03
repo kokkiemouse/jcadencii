@@ -9,6 +9,9 @@ import java.awt.*;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
+/**
+ * NEUTRINO Settting Panel
+ */
 public class NEUTRINO_settings_panel extends BPanel {
     private Function<String,String> gettext_f;
     private Object parentkun;
@@ -16,9 +19,20 @@ public class NEUTRINO_settings_panel extends BPanel {
     private String gettext(String id){
         return gettext_f.apply(id);
     }
+
+    /**
+     * get Neutrino Path
+     * @return Neutrino Path
+     */
     public String get_NEUTRINO_PATH(){
         return neutrino_dir_select_container.NEUTRINO_DIR_Select.select_path_text.getText();
     }
+
+    /**
+     * Constractor
+     * @param gettext_mod gettext lamda
+     * @param parentkun_f parent window obj
+     */
     public NEUTRINO_settings_panel(Function<String,String> gettext_mod,Object parentkun_f) {
         super();
         setLayout(new BoxLayout(this,BoxLayout.Y_AXIS));
