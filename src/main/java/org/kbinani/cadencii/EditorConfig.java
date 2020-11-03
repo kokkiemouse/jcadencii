@@ -343,7 +343,11 @@ public class EditorConfig {
     private boolean __revoked__InvokeUtauCoreWithWine = false;
     @XmlGenericType(SingerConfig.class)
     public Vector<SingerConfig> UtauSingers = new Vector<SingerConfig>();
-
+    /**
+     * NEUTRINO PATH
+     *
+     */
+    public String NEUTRINO_PATH = "";
     /// <summary>
     /// UTAU互換の合成器のパス(1個目)
     /// </summary>

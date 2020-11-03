@@ -71,7 +71,7 @@ public class PortUtil implements AWTEventListener {
     public static Color Aquamarine = new Color(127, 255, 212);
     public static Color Azure = new Color(240, 255, 255);
     public static Color Beige = new Color(245, 245, 220);
-    public static Color Bisque = new Color(255, 228, 196);
+    public static Color Bisque = new Color(252, 194, 127);
     public static Color Black = new Color(0, 0, 0);
     public static Color BlanchedAlmond = new Color(255, 235, 205);
     public static Color Blue = new Color(0, 0, 255);

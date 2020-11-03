@@ -313,7 +313,7 @@ public class NEUTRINOWaveGenerator extends WaveUnit implements WaveGenerator {
             System.out.println("tmpfile:" + tmp_file);
             try {
                 PortUtil.copyFile(tmp_file, fsys.combine(tmp_dir, hash +
-                        ".usq"));
+                        ".musicxml"));
                 PortUtil.deleteFile(tmp_file);
             } catch (Exception ex) {
             }

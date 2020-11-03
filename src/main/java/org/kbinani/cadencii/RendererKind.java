@@ -23,7 +23,13 @@ package org.kbinani.cadencii;
  * @author kokkiemouse
  *
  */
-public enum RendererKind {VOCALOID1,
+public enum RendererKind {
+
+    /**
+     * NEUTRINO
+     */
+    NEUTRINO,
+    VOCALOID1,
 
     /// <summary>
     /// Synthesize Engine 1.0のVOCALOID1
@@ -49,10 +55,6 @@ public enum RendererKind {VOCALOID1,
     /// vConnect-STAND
     /// </summary>
     VCNT,
-    /**
-     * NEUTRINO
-     */
-    NEUTRINO,
     /// <summary>
     /// 何もしない歌声合成システム(EmptyRenderingRunner)
     /// </summary>

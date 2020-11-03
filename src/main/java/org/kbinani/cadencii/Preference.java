@@ -17,8 +17,7 @@ import org.kbinani.*;
 
 import org.kbinani.apputil.*;
 
-import org.kbinani.media.*;
-
+import org.kbinani.cadencii.neutrino.preference.NEUTRINO_settings_panel;
 import org.kbinani.vsq.*;
 
 import org.kbinani.windows.forms.*;
@@ -50,13 +49,8 @@ import java.util.*;
 
 import javax.sound.midi.MidiDevice;
 import javax.sound.midi.MidiSystem;
-import javax.sound.midi.Receiver;
 
-import javax.swing.BorderFactory;
-import javax.swing.JCheckBox;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JTabbedPane;
+import javax.swing.*;
 import javax.swing.border.TitledBorder;
 
 
@@ -170,6 +164,7 @@ public class Preference extends BDialog {
     private BButton btnWavtool = null;
     private BCheckBox chkWavtoolWithWine = null;
     private BPanel tabUtausingers = null; //  @jve:decl-index=0:visual-constraint="-95,1685"
+    private NEUTRINO_settings_panel tabNeutrino = null;
     private BListView listSingers = null;
     private BButton btnAdd = null;
     private BButton btnRemove = null;
@@ -258,6 +253,7 @@ public class Preference extends BDialog {
         tabPane.addTab("Operation", getTabOperation());
         tabPane.addTab("Platform", getTabPlatform());
         tabPane.addTab("UTAU Singers", getTabUtausingers());
+        tabPane.addTab("NEUTRINO Preference", getTabNeutrino());
         tabPane.addTab("File", getTabFile());
         tabPane.addTab("Synthesizer", getTabSingingSynth());
 
@@ -529,7 +525,7 @@ public class Preference extends BDialog {
             }
         }
 
-        return RendererKind.VOCALOID2;
+        return RendererKind.NEUTRINO;
     }
 
     /// <summary>
@@ -1391,7 +1387,9 @@ public class Preference extends BDialog {
             }
         }
     }
-
+    public void neutrino_ok_click(Object sender,BEventArgs e){
+        AppManager.editorConfig.NEUTRINO_PATH=tabNeutrino.neutrino_dir_select_container.NEUTRINO_DIR_Select.select_path_text.getText();
+    }
     public void btnOK_Click(Object sender, BEventArgs e) {
         boolean was_modified = false;
 
@@ -3851,6 +3849,25 @@ public class Preference extends BDialog {
         }
 
         return tabUtausingers;
+    }
+    private BPanel getTabNeutrino(){
+        if(tabNeutrino == null){
+            tabNeutrino = new NEUTRINO_settings_panel((idkun) -> gettext(idkun),this);
+            tabNeutrino.neutrino_dir_select_container.NEUTRINO_DIR_Select.select_path_text.setText(
+                    AppManager.editorConfig.NEUTRINO_PATH
+            );
+            tabNeutrino.neutrino_dir_select_container.NEUTRINO_DIR_Select.select_browse_b.addActionListener(e -> {
+                BFolderBrowser fb=new BFolderBrowser();
+                fb.setDescription("NEUTRINO Dir");
+                if(AppManager.showModalDialog(fb,this) != BDialogResult.OK){
+                    return;
+                }
+                tabNeutrino.neutrino_dir_select_container.NEUTRINO_DIR_Select.select_path_text.setText(fb.getSelectedPath());
+
+            });
+            btnOK.clickEvent.add(new BEventHandler(this,"neutrino_ok_click"));
+        }
+        return tabNeutrino;
     }
 
     /**
