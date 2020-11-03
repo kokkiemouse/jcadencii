@@ -64,13 +64,13 @@ class TestXmlSerializer {
  * 以下の例では，valueをValueに，listをListに変更しています
  * <pre>
  *  public class Test2{
-    @XmlElementName( "Value" )
+    \@XmlElementName( "Value" )
     public float value = 1.0f;
     private int m_a = 2;
     private boolean m_b = true;
-    @XmlElementName( "List" )
-    @XmlGenericType( Integer.class )
-    public Vector<Integer> list = new Vector<Integer>();
+    \@XmlElementName( "List" )
+    \@XmlGenericType( Integer.class )
+    public Vector\<Integer\> list = new Vector\<Integer\>();
 
     public boolean isHoge(){
         return m_b;
@@ -80,7 +80,7 @@ class TestXmlSerializer {
         m_b = value;
     }
 
-    @XmlIgnore
+    \@XmlIgnore
     public int getA(){
         return m_a;
     }
@@ -152,13 +152,13 @@ public class XmlSerializer {
     /**
      * 指定したクラスの，指定した名前のプロパティが総称型引数を持つ型だった場合，
      * その型に定義されているstatic String getGenericTypeName(String property_name)メソッド
-     * を呼び出すことによって，その型を表すClass<?>を返します．
+     * を呼び出すことによって，その型を表すClass< ? >を返します．
      * 上記のメソッドが定義されていない場合，nullを返します．上記メソッドが定義されている場合であって，
      * 上記メソッドの戻り値が正確でない場合(正しい限定名でないなど)や呼び出しに失敗した場合も，
      * nullを返します．
      * @param cls 検査対象の型
      * @param property_name 検査対象のプロパティ名
-     * @return 検査対象の型の，指定したプロパティの型の型引数の型を表すClass<?>
+     * @return 検査対象の型の，指定したプロパティの型の型引数の型を表すClass< ? >
      */
     public static Class<?> getGenericType(Class<?> cls, String property_name) {
         XmlMember xm = XmlMember.extract(cls, property_name);
