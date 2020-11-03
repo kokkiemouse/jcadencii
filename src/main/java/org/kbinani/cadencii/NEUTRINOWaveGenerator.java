@@ -223,12 +223,11 @@ public class NEUTRINOWaveGenerator extends WaveUnit implements WaveGenerator {
         double[] bufR = new double[BUFLEN];
         //String straight_synth = STRAIGHT_SYNTH;
 
-        /*if (!fsys.isFileExists(straight_synth)) {
+        if (!fsys.isFileExists(AppManager.editorConfig.NEUTRINO_PATH + "/Run.sh")) {
             exitBegin();
 
             return;
         }
-*/
         int count = mQueue.size();
 
         // 合計でレンダリングしなければならないサンプル数を計算しておく
@@ -293,8 +292,8 @@ public class NEUTRINOWaveGenerator extends WaveUnit implements WaveGenerator {
                             new FileOutputStream(tmp_file)));
 
              */
-                //prepareMetaText(sw, queue.track, queue.oto_ini, queue.endClock);
-                mVsq.printAsMusicXml(tmp_file,"UTF-8");
+            //prepareMetaText(sw, queue.track, queue.oto_ini, queue.endClock);
+            mVsq.printAsMusicXml(tmp_file, "UTF-8");
             /*
             } catch (Exception ex) {
             } finally {
@@ -313,7 +312,7 @@ public class NEUTRINOWaveGenerator extends WaveUnit implements WaveGenerator {
             System.out.println("tmpfile:" + tmp_file);
             try {
                 PortUtil.copyFile(tmp_file, fsys.combine(tmp_dir, hash +
-                        ".musicxml"));
+                        ".xml"));
                 PortUtil.deleteFile(tmp_file);
             } catch (Exception ex) {
             }
@@ -322,11 +321,11 @@ public class NEUTRINOWaveGenerator extends WaveUnit implements WaveGenerator {
 
             if (!mCache.containsKey(hash) ||
                     !fsys.isFileExists(tmp_file + ".wav")) {
-                String[] args = new String[] {
+                String[] args = new String[]{
                         /*straight_synth.replace("\\", "\\" + "\\"),*/
                         tmp_file.replace("\\", "\\" + "\\") + ".usq",
                         tmp_file.replace("\\", "\\" + "\\") + ".wav"
-                    };
+                };
                 ProcessBuilder pb = new ProcessBuilder(args);
                 pb.redirectErrorStream(true);
 
@@ -341,10 +340,18 @@ public class NEUTRINOWaveGenerator extends WaveUnit implements WaveGenerator {
                 }
 
                 try {
-                    PortUtil.deleteFile(tmp_file + ".usq");
+                    PortUtil.deleteFile(tmp_file + ".xml");
                 } catch (Exception ex) {
                 }
-
+            }
+            String Neutrino_path = AppManager.editorConfig.NEUTRINO_PATH;
+            File musicXMLtoLabel_f = new File(Neutrino_path + "/bin/musicXMLtoLabel");
+            if (!musicXMLtoLabel_f.exists()) {
+                System.err.println("Not found musicXMLtoLabel!");
+                exitBegin();
+                return;
+            }
+/*
                 if (mCache.size() > MAX_CACHE) {
                     // キャッシュの許容個数を超えたので、古いものを削除
                     boolean first = true;
@@ -863,7 +870,8 @@ public class NEUTRINOWaveGenerator extends WaveUnit implements WaveGenerator {
             waveIncoming(bufL, bufR, tlength);
             tremain -= tlength;
         }
-
+        */
+        }
         exitBegin();
         state.reportComplete();
     }
