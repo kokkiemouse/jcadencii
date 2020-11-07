@@ -127,89 +127,25 @@ public class NEUTRINOWaveGenerator extends WaveUnit implements WaveGenerator {
 
     public void init(VsqFileEx vsq, int track, int start_clock, int end_clock,
         int sample_rate) {
-        // VSTiProxyの実装より
-        mVsq = (VsqFileEx) vsq.clone();
-        mVsq.updateTotalClocks();
-        mSampleRate = sample_rate;
 
-        if (end_clock < vsq.TotalClocks) {
-            mVsq.removePart(end_clock, mVsq.TotalClocks + 480);
-        }
+        mVsq = vsq;
+        mTrack = track;/*
+        mStartClock = start_clock;
+        mEndClock = end_clock;*/
+        mSampleRate = sample_rate;/*
+        mDriverSampleRate = 44100;
 
-        double trim_sec = 0.0; // レンダリング結果から省かなければならない秒数。
-
-        if (start_clock < mVsq.getPreMeasureClocks()) {
-            trim_sec = mVsq.getSecFromClock(start_clock);
-        } else {
-            mVsq.removePart(vsq.getPreMeasureClocks(), start_clock);
-            trim_sec = mVsq.getSecFromClock(mVsq.getPreMeasureClocks());
-        }
-
-        mVsq.updateTotalClocks();
-
-        mTrimMillisec = (int) (trim_sec * 1000.0);
-        //以上VSTiProxyの実装
-
-        // RenderingRunner.ctorの実装より
-        mTrack = track;
-        mSampleRate = sample_rate;
-
-        mLocker = new Object();
-        mRunning = false;
-        mTotalAppend = 0;
-        mTrimRemain = (int) (mTrimMillisec / 1000.0 * mSampleRate); //先頭から省かなければならないサンプル数の残り
-
-        // StraightRenderingRunner.ctorの実装より
-        mLocker = new Object();
-        mQueue = new Vector<NEUTRINORenderingQueue>();
-
-        if ((mConfig != null) && (mConfig.UtauSingers != null)) {
-            mSingerConfigSys = mConfig.UtauSingers;
-        } else {
-            mSingerConfigSys = new Vector<SingerConfig>();
-        }
-
-        int midi_tempo = 60000000 / TEMPO;
-        VsqFileEx work = (VsqFileEx) mVsq.clone();
-        TempoVector tempo = new TempoVector();
-        tempo.clear();
-        tempo.add(new TempoTableEntry(0, midi_tempo, 0.0));
-        tempo.updateTempoInfo();
-        work.adjustClockToMatchWith(tempo);
-        // テンポテーブルをクリア
-        work.TempoTable.clear();
-        work.TempoTable.add(new TempoTableEntry(0, midi_tempo, 0.0));
-        work.updateTempoInfo();
-
-        VsqTrack vsq_track = work.Track.get(track);
-        Vector<VsqEvent> events = new Vector<VsqEvent>(); // 順次取得はめんどくさいので，一度eventsに格納してから処理しよう
-        int count = vsq_track.getEventCount();
-        VsqEvent current_singer_event = null;
-
-        for (int i = 0; i < count; i++) {
-            VsqEvent item = vsq_track.getEvent(i);
-
-            if (item.ID.type == VsqIDType.Singer) {
-                if ((events.size() > 0) && (current_singer_event != null)) {
-                    // eventsに格納されたノートイベントについて，StraightRenderingQueueを順次作成し，登録
-                    appendQueue(work, track, events, current_singer_event);
-                    events.clear();
-                }
-
-                current_singer_event = item;
-            } else if (item.ID.type == VsqIDType.Anote) {
-                events.add(item);
+        try {
+            mContext = new RateConvertContext(mDriverSampleRate, mSampleRate);
+        } catch (Exception ex) {
+            try {
+                // 苦肉の策
+                mContext = new RateConvertContext(mDriverSampleRate,
+                        mDriverSampleRate);
+            } catch (Exception ex2) {
             }
         }
-
-        if ((events.size() > 0) && (current_singer_event != null)) {
-            appendQueue(work, track, events, current_singer_event);
-        }
-
-        if (mQueue.size() > 0) {
-            NEUTRINORenderingQueue q = mQueue.get(mQueue.size() - 1);
-            mVsqLengthSamples = q.startSample + q.abstractSamples;
-        }
+        */
     }
 
     public void begin(long samples, WorkerState state) {
@@ -228,58 +164,13 @@ public class NEUTRINOWaveGenerator extends WaveUnit implements WaveGenerator {
 
             return;
         }
-        int count = mQueue.size();
-
-        // 合計でレンダリングしなければならないサンプル数を計算しておく
-        double total_samples = 0;
-
-        for (int i = 0; i < count; i++) {
-            total_samples += mQueue.get(i).abstractSamples;
-        }
-
-        mTrimRemain = (int) (mTrimMillisec / 1000.0 * mSampleRate); //先頭から省かなければならないサンプル数の残り
-
-        long max_next_wave_start = mVsqLengthSamples;
-
-        if (mQueue.size() > 0) {
-            // 最初のキューが始まるまでの無音部分
-            NEUTRINORenderingQueue queue = mQueue.get(0);
-
-            if (queue.startSample > 0) {
-                for (int i = 0; i < BUFLEN; i++) {
-                    bufL[i] = 0.0;
-                    bufR[i] = 0.0;
-                }
-
-                long remain = queue.startSample;
-
-                while (remain > 0) {
-                    if (state.isCancelRequested()) {
-                        exitBegin();
-
-                        return;
-                    }
-
-                    int len = (remain > BUFLEN) ? BUFLEN : (int) remain;
-                    waveIncoming(bufL, bufR, len);
-                    remain -= len;
-                }
-            }
-        }
-
-        double[] cached_data_l = new double[BUFLEN];
-        double[] cached_data_r = new double[BUFLEN];
-        int cached_data_length = 0;
-        double processed_samples = 0.0;
-
-        for (int i = 0; i < count; i++) {
-            if (state.isCancelRequested()) {
+        if (state.isCancelRequested()) {
                 exitBegin();
 
                 return;
             }
 
-            NEUTRINORenderingQueue queue = mQueue.get(i);
+            //NEUTRINORenderingQueue queue = mQueue.get(i);
             String tmp_dir = AppManager.getTempWaveDir();
 
             String tmp_file = fsys.combine(tmp_dir, "tmp.musicxml");
@@ -312,45 +203,33 @@ public class NEUTRINOWaveGenerator extends WaveUnit implements WaveGenerator {
             System.out.println("tmpfile:" + tmp_file);
             try {
                 PortUtil.copyFile(tmp_file, fsys.combine(tmp_dir, hash +
-                        ".xml"));
+                        ".musicxml"));
                 PortUtil.deleteFile(tmp_file);
             } catch (Exception ex) {
             }
 
-            tmp_file = fsys.combine(tmp_dir, hash);
 
-            if (!mCache.containsKey(hash) ||
-                    !fsys.isFileExists(tmp_file + ".wav")) {
-                String[] args = new String[]{
-                        /*straight_synth.replace("\\", "\\" + "\\"),*/
-                        tmp_file.replace("\\", "\\" + "\\") + ".usq",
-                        tmp_file.replace("\\", "\\" + "\\") + ".wav"
-                };
-                ProcessBuilder pb = new ProcessBuilder(args);
-                pb.redirectErrorStream(true);
-
-                try {
-                    Process process = pb.start();
-                    InputStream stream = process.getInputStream();
-
-                    while ((stream.read() >= 0) && !state.isCancelRequested())
-                        ;
-                } catch (Exception ex) {
-                    System.err.println("NEUTRINOWaveGenerator#begin; ex=" + ex);
-                }
-
-                try {
-                    PortUtil.deleteFile(tmp_file + ".xml");
-                } catch (Exception ex) {
-                }
-            }
-            String Neutrino_path = AppManager.editorConfig.NEUTRINO_PATH;
-            File musicXMLtoLabel_f = new File(Neutrino_path + "/bin/musicXMLtoLabel");
+            String Neutrino_path = mConfig.NEUTRINO_PATH;
+            File musicXMLtoLabel_f = new File(fsys.combine(fsys.combine(Neutrino_path,"bin"),"musicXMLtoLabel"));
             if (!musicXMLtoLabel_f.exists()) {
                 System.err.println("Not found musicXMLtoLabel!");
                 exitBegin();
                 return;
             }
+            ProcessBuilder pb = new ProcessBuilder(fsys.combine(fsys.combine(Neutrino_path,"bin"),"musicXMLtoLabel"),
+                    fsys.combine(tmp_dir,hash +   ".musicxml"),
+                    fsys.combine(tmp_dir,hash +"_full.lab"),
+                    fsys.combine(tmp_dir,hash + "_mono.lab"));
+            pb.directory(musicXMLtoLabel_f.getParentFile().getParentFile());
+            pb.inheritIO();
+            try {
+                Process p=pb.start();
+                p.waitFor();
+                System.out.println(pb.redirectInput());
+            }catch (IOException | InterruptedException e){
+                e.printStackTrace();
+            }
+
 /*
                 if (mCache.size() > MAX_CACHE) {
                     // キャッシュの許容個数を超えたので、古いものを削除
@@ -508,7 +387,7 @@ public class NEUTRINOWaveGenerator extends WaveUnit implements WaveGenerator {
                             //                  \/
                             //  ----[***********]----------------------------------->  append
                             //  -----------------[********][******]----------------->  new cache
-                            //  
+                            //
                             //                         OR
                             // PATTERN B
                             //  ----[*****************************]----------------->   cache
@@ -518,7 +397,7 @@ public class NEUTRINOWaveGenerator extends WaveUnit implements WaveGenerator {
                             //                  \/
                             //  ----[***************][*****]------------------------>   append
                             //  ----------------------------[*****]----------------->   new chache
-                            //  
+                            //
                             try {
                                 // レンダリング結果とキャッシュをMIX
                                 int remain = rendered_length;
@@ -567,7 +446,7 @@ public class NEUTRINOWaveGenerator extends WaveUnit implements WaveGenerator {
                             //  ----[*****************************]----------------->   append
                             //  ---------------------------------------------------->   new chache -> NULL!!
                             //  -----------------------------------[****]----------->   append#2 (silence)
-                            //  
+                            //
                             try {
                                 // レンダリング結果とキャッシュをMIX
                                 int remain = rendered_length;
@@ -627,7 +506,7 @@ public class NEUTRINOWaveGenerator extends WaveUnit implements WaveGenerator {
                             //                  \/
                             //  ----[******]---------------------------------------->  append
                             //  ------------[*****][******]------------------------->  new cache
-                            //  
+                            //
                             try {
                                 // 次のキューの直前の部分まで，レンダリング結果を読み込んでMIX，送信
                                 int append_len = (int) (next_wave_start -
@@ -710,7 +589,7 @@ public class NEUTRINOWaveGenerator extends WaveUnit implements WaveGenerator {
                             //                  \/
                             //  ----[*************][*]------------------------------>  append
                             //  ----------------------[***]------------------------->  new cache
-                            //  
+                            //
                             try {
                                 // キャッシュとレンダリング結果をMIX
                                 int remain = cached_data_length;
@@ -777,7 +656,7 @@ public class NEUTRINOWaveGenerator extends WaveUnit implements WaveGenerator {
                             //  ----[*************][******]------------------------->  append
                             //  ---------------------------------------------------->  new cache -> NULL!!
                             //  ---------------------------[***]-------------------->  append#2 (silence)
-                            //  
+                            //
                             try {
                                 // レンダリング結果とキャッシュをMIXして送信
                                 int remain = cached_data_length;
@@ -871,7 +750,6 @@ public class NEUTRINOWaveGenerator extends WaveUnit implements WaveGenerator {
             tremain -= tlength;
         }
         */
-        }
         exitBegin();
         state.reportComplete();
     }

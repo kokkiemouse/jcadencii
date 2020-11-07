@@ -97,6 +97,8 @@ if ( renderer_kind == RendererKind.VOCALOID1 ) {
     item = VocaloSysUtil.getSingerID( language, program, SynthesizerType.VOCALOID2 );
 } else if ( renderer_kind == RendererKind.UTAU || renderer_kind == RendererKind.VCNT ) {
     item = AppManager.getSingerIDUtau( language, program );
+} else if ( renderer_kind == RendererKind.NEUTRINO ) {
+    item = AppManager.getSingerIDNEUTRINO(  program );
 } else if ( renderer_kind == RendererKind.AQUES_TONE ) {
     item = AppManager.getSingerIDAquesTone( program );
 }
@@ -1103,7 +1105,7 @@ for ( Iterator<Integer> itr1 = track1.indexIterator( iterator_kind ); itr1.hasNe
         // item1とitem2が同じかどうか判定する
         if ( item1.equals( item2 ) ) {
             // UTAU 音源を使用する際はUstEvent内も比較しないといけない．
-            if ( kind == RendererKind.VCNT || kind == RendererKind.UTAU ) {
+                if ( kind == RendererKind.VCNT || kind == RendererKind.UTAU ) {
                 // 歌詞は UstEvent からは判断できないので
                 if ( item1.UstEvent.equalsForSynth( item2.UstEvent ) && item1.ID.LyricHandle.L0.Phrase == item2.ID.LyricHandle.L0.Phrase ) {
                     found = true;

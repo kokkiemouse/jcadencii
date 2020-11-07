@@ -184,6 +184,8 @@ public class VsqFileEx extends VsqFile implements Cloneable, ICommandRunnable,
             return RendererKind.VOCALOID2;
         } else if (version.startsWith(VSTiDllManager.RENDERER_STR0)) {
             return RendererKind.VCNT;
+        } else if (version.startsWith(VSTiDllManager.RENDERER_NEUT)) {
+            return RendererKind.NEUTRINO;
         } else if (version.startsWith(VSTiDllManager.RENDERER_UTU0)) {
             return RendererKind.UTAU;
         } else if (version.startsWith(VSTiDllManager.RENDERER_NULL)) {
@@ -205,6 +207,8 @@ public class VsqFileEx extends VsqFile implements Cloneable, ICommandRunnable,
                 vsq_common.Version = VSTiDllManager.RENDERER_AQT0;
             } else if (renderer_kind == RendererKind.VCNT) {
                 vsq_common.Version = VSTiDllManager.RENDERER_STR0;
+            } else if (renderer_kind == RendererKind.NEUTRINO) {
+                vsq_common.Version = VSTiDllManager.RENDERER_NEUT;
             } else if (renderer_kind == RendererKind.UTAU) {
                 vsq_common.Version = VSTiDllManager.RENDERER_UTU0;
             } else if (renderer_kind == RendererKind.VOCALOID1) {

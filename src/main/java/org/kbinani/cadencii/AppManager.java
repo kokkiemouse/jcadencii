@@ -1274,6 +1274,8 @@ if ( kind == RendererKind.AQUES_TONE ) {
     return "AQT000";
 } else if ( kind == RendererKind.VCNT ) {
     return "STR000";
+} else if ( kind == RendererKind.NEUTRINO ) {
+    return "NEUT000";
 } else if ( kind == RendererKind.UTAU ) {
     return "UTU000";
 } else if ( kind == RendererKind.VOCALOID1 ) {
@@ -2757,7 +2759,19 @@ int index = -1;
     ret.type = VsqIDType.Singer;
     return ret;
         }
-
+        public static VsqID getSingerIDNEUTRINO( int program )
+        {
+            VsqID ret = new VsqID( 0 );
+            ret.type = VsqIDType.Singer;
+            int index = -1;
+            ret.IconHandle = new IconHandle();
+            ret.IconHandle.Program = 0;
+            ret.IconHandle.Language = 0;
+            ret.IconHandle.IconID = "$0701" + PortUtil.toHexString( 0, 2 ) + PortUtil.toHexString( 0, 2 );
+            ret.IconHandle.IDS = "Unknown";
+            ret.type = VsqIDType.Singer;
+            return ret;
+        }
         public static Color getHilightColor()
         {
 return mHilightBrush;

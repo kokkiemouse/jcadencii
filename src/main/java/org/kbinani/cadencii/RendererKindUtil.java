@@ -66,6 +66,8 @@ public class RendererKindUtil {
             return RendererKind.VOCALOID2;
         } else if (str.compare(value, VCNT)) {
             return RendererKind.VCNT;
+        } else if (str.compare(value, NEUTRINO)) {
+            return RendererKind.NEUTRINO;
         } else if (str.compare(value, UTAU)) {
             return RendererKind.UTAU;
         } else if (str.compare(value, AQUES_TONE)) {

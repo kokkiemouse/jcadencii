@@ -83,6 +83,8 @@ public class VSTiDllManager {
     public static final String RENDERER_DSB3 = "DSB3";
     public static final String RENDERER_UTU0 = "UTU0";
     public static final String RENDERER_STR0 = "STR0";
+    public static final String RENDERER_NEUT = "NEUT";
+
     public static final String RENDERER_AQT0 = "AQT0";
 
     /// <summary>
@@ -304,6 +306,10 @@ public class VSTiDllManager {
                     return true;
                 }
             }
+        }
+
+        if (renderer == RendererKind.NEUTRINO) {
+            return true;
         }
 
         return false;

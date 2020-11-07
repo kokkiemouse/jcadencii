@@ -611,6 +611,7 @@ public class FormMain extends BForm implements FormMainUi {
     private BMenuItem cMenuTrackTabRendererVOCALOID1 = null;
     private BMenu cMenuTrackTabRendererUtau = null;
     private BMenuItem cMenuTrackTabRendererStraight = null;
+    private BMenuItem cMenuTrackTabRendererNEUTRINO = null;
     private BMenuItem cMenuPianoQuantizeOff = null;
     private BPanel panel3 = null;
     private PictOverview panelOverview = null;
@@ -16758,7 +16759,7 @@ heaven:
         } else if ((sender == cMenuTrackTabRendererStraight) ||
                 (sender == menuTrackRendererVCNT)) {
             kind = RendererKind.VCNT;
-        } else if ((sender == cMenuTrackTabRendererStraight) ||
+        } else if ((sender == cMenuTrackTabRendererNEUTRINO) ||
                 (sender == menuTrackRendererNEUTRINO)) {
             kind = RendererKind.NEUTRINO;
         } else if ((sender == cMenuTrackTabRendererVOCALOID1) ||
@@ -16862,7 +16863,7 @@ heaven:
             cMenuTrackTabRendererVOCALOID2.setSelected(kind == RendererKind.VOCALOID2);
             cMenuTrackTabRendererUtau.setSelected(kind == RendererKind.UTAU);
             cMenuTrackTabRendererStraight.setSelected(kind == RendererKind.VCNT);
-            cMenuTrackTabRendererStraight.setSelected(kind == RendererKind.NEUTRINO);
+            cMenuTrackTabRendererNEUTRINO.setSelected(kind == RendererKind.NEUTRINO);
             menuTrackRendererVOCALOID1.setSelected(kind == RendererKind.VOCALOID1);
             menuTrackRendererVOCALOID2.setSelected(kind == RendererKind.VOCALOID2);
             menuTrackRendererUtau.setSelected(kind == RendererKind.UTAU);
@@ -20617,6 +20618,7 @@ heaven:
             cMenuTrackTabRenderer.add(getCMenuTrackTabRendererVOCALOID2());
             cMenuTrackTabRenderer.add(getCMenuTrackTabRendererUtau());
             cMenuTrackTabRenderer.add(getCMenuTrackTabRendererStraight());
+            cMenuTrackTabRenderer.add(getCMenuTrackTabRendererNEUTRINO());
             cMenuTrackTabRenderer.add(getCMenuTrackTabRendererAquesTone());
         }
 
@@ -20679,6 +20681,19 @@ heaven:
         return cMenuTrackTabRendererStraight;
     }
 
+    /**
+     * This method initializes BMenuItem3
+     *
+     * @return javax.swing.BMenuItem
+     */
+    private BMenuItem getCMenuTrackTabRendererNEUTRINO() {
+        if (cMenuTrackTabRendererNEUTRINO == null) {
+            cMenuTrackTabRendererNEUTRINO = new BMenuItem();
+            cMenuTrackTabRendererNEUTRINO.setText("NEUTRINO");
+        }
+
+        return cMenuTrackTabRendererNEUTRINO;
+    }
     /**
      * This method initializes BMenuItem
      *
