@@ -176,8 +176,9 @@ public class NEUTRINOWaveGenerator extends WaveUnit implements WaveGenerator {
             String tmp_file = fsys.combine(tmp_dir, "tmp.musicxml");
             String hash = "";
             BufferedWriter sw = null;
-
-            /*
+            String MODEL_STR="KIRITAN";
+            int numthreads=4;
+            int STYLESHIFT=0;            /*
             try {
                 sw = new BufferedWriter(new OutputStreamWriter(
                             new FileOutputStream(tmp_file)));
@@ -216,19 +217,48 @@ public class NEUTRINOWaveGenerator extends WaveUnit implements WaveGenerator {
                 exitBegin();
                 return;
             }
-            ProcessBuilder pb = new ProcessBuilder(fsys.combine(fsys.combine(Neutrino_path,"bin"),"musicXMLtoLabel"),
+        ProcessBuilder pbm2label = new ProcessBuilder(fsys.combine(fsys.combine(Neutrino_path,"bin"),"musicXMLtoLabel"),
                     fsys.combine(tmp_dir,hash +   ".musicxml"),
-                    fsys.combine(tmp_dir,hash +"_full.lab"),
-                    fsys.combine(tmp_dir,hash + "_mono.lab"));
-            pb.directory(musicXMLtoLabel_f.getParentFile().getParentFile());
-            pb.inheritIO();
-            try {
-                Process p=pb.start();
-                p.waitFor();
-                System.out.println(pb.redirectInput());
-            }catch (IOException | InterruptedException e){
-                e.printStackTrace();
-            }
+                    fsys.combine(tmp_dir,"full.lab"),
+                    fsys.combine(tmp_dir,"mono.lab"));
+        pbm2label.directory(musicXMLtoLabel_f.getParentFile().getParentFile());
+        pbm2label.inheritIO();
+        try {
+            Process p=pbm2label.start();
+            p.waitFor();
+            System.out.println(pbm2label.redirectInput());
+        }catch (IOException | InterruptedException e){
+            e.printStackTrace();
+        }
+        ProcessBuilder pbNEUTRINO=new ProcessBuilder(fsys.combine(fsys.combine(Neutrino_path,"bin"),"NEUTRINO"),
+                fsys.combine(tmp_dir,"full.lab"),
+                fsys.combine(tmp_dir,"timing.lab"),
+                fsys.combine(tmp_dir, "out.f0"),
+                fsys.combine(tmp_dir,"out.mgc"),
+                fsys.combine(tmp_dir,"out.bap"),
+                fsys.combine(fsys.combine(Neutrino_path,"model"),MODEL_STR ) + "/",
+                "-n",
+                String.valueOf(numthreads),
+                "-k",
+                String.valueOf(STYLESHIFT),
+                "-t",
+                "-m"
+        );
+        pbNEUTRINO.directory(musicXMLtoLabel_f.getParentFile().getParentFile());
+        Map<String, String> env_NEUTRINO = pbNEUTRINO.environment();
+        env_NEUTRINO.put("LD_LIBRARY_PATH",
+                fsys.combine(Neutrino_path,"bin") + ":" +
+                fsys.combine(fsys.combine(Neutrino_path,"NSF"),"bin")
+                 + ":" +  env_NEUTRINO.get("LD_LIBRARY_PATH"));
+        pbNEUTRINO.inheritIO();
+        try {
+            Process p=pbNEUTRINO.start();
+            p.waitFor();
+            System.out.println(pbNEUTRINO.redirectInput());
+        }catch (IOException | InterruptedException e){
+            e.printStackTrace();
+        }
+
 
 /*
                 if (mCache.size() > MAX_CACHE) {
