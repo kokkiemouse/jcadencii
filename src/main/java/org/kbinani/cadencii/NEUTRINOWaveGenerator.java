@@ -258,8 +258,48 @@ public class NEUTRINOWaveGenerator extends WaveUnit implements WaveGenerator {
         }catch (IOException | InterruptedException e){
             e.printStackTrace();
         }
+        ProcessBuilder pbNSF=new ProcessBuilder(fsys.combine(fsys.combine(Neutrino_path,"bin"),"NSF_IO"),
+                fsys.combine(tmp_dir,"full.lab"),
+                fsys.combine(tmp_dir,"timing.lab"),
+                fsys.combine(tmp_dir, "out.f0"),
+                fsys.combine(tmp_dir,"out.mgc"),
+                fsys.combine(tmp_dir,"out.bap"),
+                MODEL_STR,
+                fsys.combine(tmp_dir,"out_nsf.wav")
+        );
+        pbNSF.directory(musicXMLtoLabel_f.getParentFile().getParentFile());
+        Map<String, String> env_NSF = pbNSF.environment();
+        env_NSF.put("LD_LIBRARY_PATH",
+                fsys.combine(Neutrino_path,"bin") + ":" +
+                        fsys.combine(fsys.combine(Neutrino_path,"NSF"),"bin")
+                        + ":" +  env_NEUTRINO.get("LD_LIBRARY_PATH"));
+        pbNSF.inheritIO();
+        try {
+            Process p=pbNSF.start();
+            p.waitFor();
+            System.out.println(pbNSF.redirectInput());
+        }catch (IOException | InterruptedException e){
+            e.printStackTrace();
+        }
+        WaveRateConverter wr = null;
+        try {
+            wr = new WaveRateConverter(new WaveReader(fsys.combine(tmp_dir, "out_nsf.wav")), mSampleRate);
+        }catch (Exception e){
+            e.printStackTrace();
+            wr=null;
+        }
+        long pos = 0;
+        int wave_samples = 0;
 
-
+        if (wr != null) {
+            wave_samples = (int) wr.getTotalSamples();
+        }
+        try {
+            wr.read(0, wave_samples, bufL, bufR);
+            waveIncoming(bufL,bufR,wave_samples);
+        }catch (IOException e){
+            serr.println(e.getLocalizedMessage());
+        }
 /*
                 if (mCache.size() > MAX_CACHE) {
                     // キャッシュの許容個数を超えたので、古いものを削除
@@ -377,8 +417,6 @@ public class NEUTRINOWaveGenerator extends WaveUnit implements WaveGenerator {
                             // 長さが変わる
                             cached_data_length = overlapped;
                             // WAVEから読み込み
-                            wr.read(pos, overlapped, cached_data_l,
-                                cached_data_r);
                         }
                     } else if ((i + 1) < count) {
                         // 次のキューのためにデータを残す必要がない場合で、かつ、最後のキューでない場合。
