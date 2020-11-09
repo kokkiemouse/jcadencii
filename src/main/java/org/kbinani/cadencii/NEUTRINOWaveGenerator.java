@@ -132,6 +132,7 @@ public class NEUTRINOWaveGenerator extends WaveUnit implements WaveGenerator {
         mTrack = track;/*
         mStartClock = start_clock;
         mEndClock = end_clock;*/
+        mLocker = new Object();
         mSampleRate = sample_rate;/*
         mDriverSampleRate = 44100;
 
@@ -294,11 +295,34 @@ public class NEUTRINOWaveGenerator extends WaveUnit implements WaveGenerator {
         if (wr != null) {
             wave_samples = (int) wr.getTotalSamples();
         }
-        try {
-            wr.read(0, wave_samples, bufL, bufR);
-            waveIncoming(bufL,bufR,wave_samples);
-        }catch (IOException e){
-            serr.println(e.getLocalizedMessage());
+
+        int remain = wave_samples;
+
+        while (remain > 0) {
+            if (state.isCancelRequested()) {
+                exitBegin();
+
+                return;
+            }
+
+            int len = (remain > BUFLEN) ? BUFLEN : remain;
+
+            if (wr != null) {
+                try {
+                    wr.read(pos, len, bufL, bufR);
+                }catch (IOException e){
+                    e.printStackTrace();
+                }
+            } else {
+                for (int j = 0; j < BUFLEN; j++) {
+                    bufL[j] = 0;
+                    bufR[j] = 0;
+                }
+            }
+
+            waveIncoming(bufL, bufR, len);
+            pos += len;
+            remain -= len;
         }
 /*
                 if (mCache.size() > MAX_CACHE) {
