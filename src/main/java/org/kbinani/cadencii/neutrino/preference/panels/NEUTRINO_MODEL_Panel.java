@@ -7,18 +7,18 @@ import org.kbinani.windows.forms.BTextBox;
 
 import javax.swing.*;
 
-public class NEUTRINO_DIR_Select_Panel extends BPanel {
-    public BTextBox select_path_text;
-    public BButton select_browse_b;
-    public NEUTRINO_DIR_Select_Panel() {
+public class NEUTRINO_MODEL_Panel extends BPanel {
+
+    public BComboBox select_combo_box;
+
+    public NEUTRINO_MODEL_Panel() {
         super();
         setLayout(new BoxLayout(this,BoxLayout.X_AXIS));
 
-        select_browse_b=new BButton();
-        select_browse_b.setText("...");
-        select_path_text=new BTextBox();
-        add(select_path_text);
-        add(select_browse_b);
+        select_combo_box=new BComboBox();
+        select_combo_box.addItem("KIRITAN");
+        select_combo_box.addItem("ITAKO");
+        add(select_combo_box);
         //select_path_text.setSize((this.getWidth() - select_browse_b.getWidth()),select_browse_b.getHeight());
     }
 }
