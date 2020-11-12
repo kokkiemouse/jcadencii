@@ -2,6 +2,7 @@ package org.kbinani.cadencii.neutrino.preference;
 
 import org.kbinani.cadencii.neutrino.preference.panels.NEUTRINO_DIR_SELECT_CONTAINER;
 import org.kbinani.cadencii.neutrino.preference.panels.NEUTRINO_DIR_Select_Panel;
+import org.kbinani.cadencii.neutrino.preference.panels.NEUTRINO_MODEL_SELECT_CONTAINER;
 import org.kbinani.windows.forms.*;
 
 import javax.swing.*;
@@ -16,6 +17,7 @@ public class NEUTRINO_settings_panel extends BPanel {
     private Function<String,String> gettext_f;
     private Object parentkun;
     public NEUTRINO_DIR_SELECT_CONTAINER neutrino_dir_select_container;
+    public NEUTRINO_MODEL_SELECT_CONTAINER neutrino_model_select_container;
     private String gettext(String id){
         return gettext_f.apply(id);
     }
@@ -47,6 +49,11 @@ public class NEUTRINO_settings_panel extends BPanel {
         add(NEUTRINO_PATH_L);
         neutrino_dir_select_container=new NEUTRINO_DIR_SELECT_CONTAINER();
         add(neutrino_dir_select_container);
+        BLabel NEUTRINO_MODEL_L=new BLabel();
+        NEUTRINO_MODEL_L.setText(gettext("MODEL"));
+        add(NEUTRINO_MODEL_L);
+        neutrino_model_select_container=new NEUTRINO_MODEL_SELECT_CONTAINER();
+        add(neutrino_model_select_container);
 
     }
 }
