@@ -177,7 +177,8 @@ public class NEUTRINOWaveGenerator extends WaveUnit implements WaveGenerator {
             String tmp_file = fsys.combine(tmp_dir, "tmp.musicxml");
             String hash = "";
             BufferedWriter sw = null;
-            String MODEL_STR="KIRITAN";
+            //String MODEL_STR="KIRITAN";
+        String MODEL_STR=AppManager.editorConfig.NEUTRINO_MODEL;
             int numthreads=4;
             int STYLESHIFT=0;            /*
             try {

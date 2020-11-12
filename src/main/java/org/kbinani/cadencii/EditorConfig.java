@@ -348,6 +348,10 @@ public class EditorConfig {
      *
      */
     public String NEUTRINO_PATH = "";
+    /**
+     * NEUTRINO_MODEL
+     */
+    public String NEUTRINO_MODEL = "KIRITAN";
     /// <summary>
     /// UTAU互換の合成器のパス(1個目)
     /// </summary>

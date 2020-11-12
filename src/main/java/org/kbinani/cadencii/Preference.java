@@ -1395,6 +1395,7 @@ public class Preference extends BDialog {
      */
     public void neutrino_ok_click(Object sender,BEventArgs e){
         AppManager.editorConfig.NEUTRINO_PATH=tabNeutrino.neutrino_dir_select_container.NEUTRINO_DIR_Select.select_path_text.getText();
+        AppManager.editorConfig.NEUTRINO_MODEL=tabNeutrino.neutrino_model_select_container.NEUTRINO_MODEL_P.select_combo_box.getSelectedItem().toString();
     }
     public void btnOK_Click(Object sender, BEventArgs e) {
         boolean was_modified = false;
@@ -3862,6 +3863,7 @@ public class Preference extends BDialog {
             tabNeutrino.neutrino_dir_select_container.NEUTRINO_DIR_Select.select_path_text.setText(
                     AppManager.editorConfig.NEUTRINO_PATH
             );
+            tabNeutrino.neutrino_model_select_container.NEUTRINO_MODEL_P.select_combo_box.setSelectedItem(AppManager.editorConfig.NEUTRINO_MODEL);
             tabNeutrino.neutrino_dir_select_container.NEUTRINO_DIR_Select.select_browse_b.addActionListener(e -> {
                 BFolderBrowser fb=new BFolderBrowser();
                 fb.setDescription("NEUTRINO Dir");

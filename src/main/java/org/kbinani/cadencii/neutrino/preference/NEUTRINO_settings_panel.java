@@ -29,6 +29,9 @@ public class NEUTRINO_settings_panel extends BPanel {
     public String get_NEUTRINO_PATH(){
         return neutrino_dir_select_container.NEUTRINO_DIR_Select.select_path_text.getText();
     }
+    public String get_NEUTRINO_MODEL(){
+        return neutrino_model_select_container.NEUTRINO_MODEL_P.select_combo_box.getSelectedItem().toString();
+    }
 
     /**
      * Constractor
